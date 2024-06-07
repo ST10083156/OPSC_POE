@@ -2,7 +2,6 @@ package com.example.opsc_poe_part_3
 
 import android.app.Activity
 import android.content.ContentValues
-import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -24,17 +23,15 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.opsc_poe_part_3.databinding.ActivityNewTimesheetEntryBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.toObject
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 import java.io.ByteArrayOutputStream
+import java.text.ParseException
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneId
 import java.util.Calendar
 import java.util.Date
-import java.util.EventListener
 import java.util.Locale
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -77,7 +74,7 @@ class NewTimesheetEntry : AppCompatActivity() {
             finish()
         }
 
-        categoriesList = mutableListOf<Category>()
+categoriesList = mutableListOf()
         getCategories(userEmail) { categoriesList ->
             val categoryNames = categoriesList.map { it.name }
             setupSpinner(categoryNames)
@@ -95,12 +92,12 @@ class NewTimesheetEntry : AppCompatActivity() {
         buttonAddPicture.setOnClickListener {
             pictureAdd()
         }
-
+selectedDate = localDateToDate(LocalDate.now())
         val calendarView = binding.dateCalendar
         calendarView.setOnDateChangeListener { view, year, month, dayOfMonth ->
             val calendar = Calendar.getInstance()
             calendar.set(year, month, dayOfMonth)
-            selectedDate = calendar.time
+            selectedDate = convertTextToDate(calendarToSimpleDate(calendar))
         }
         buttonTimer = binding.buttonTimer
         buttonTimer.setOnClickListener {
@@ -122,7 +119,7 @@ class NewTimesheetEntry : AppCompatActivity() {
             if (binding.editTextName.text == null ||
                 binding.categorySpinner.selectedItem == null ||
                 binding.editTextDescription.text == null ||
-                binding.dateCalendar.isSelected == false ||
+                selectedDate == null ||
                 binding.imageView.drawable == R.drawable.ic_launcher_foreground.toDrawable()
             ) {
                 Toast.makeText(
@@ -134,7 +131,7 @@ class NewTimesheetEntry : AppCompatActivity() {
                 if (binding.editTextName.text != null &&
                     binding.categorySpinner.selectedItem != null &&
                     binding.editTextDescription.text != null &&
-                    binding.dateCalendar.isSelected != false &&
+                    selectedDate == null &&
                     binding.imageView.drawable == R.drawable.ic_launcher_foreground.toDrawable()
                 ) {
                     timesheetEntry = TimesheetEntry(
@@ -185,12 +182,44 @@ class NewTimesheetEntry : AppCompatActivity() {
         spinner.adapter = adapter
     }
 
+    fun localDateToDate(localDate: LocalDate): Date {
+        val localDateTime: LocalDateTime = localDate.atStartOfDay()
+        val instant = localDateTime.atZone(ZoneId.systemDefault()).toInstant()
+        return Date.from(instant)
+    }
+
+    fun convertToSimpleDate(originalDateString: String): String {
+        // Define the original date format
+        val originalDateFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.getDefault())
+        // Parse the original date string into a Date object
+        val date = originalDateFormat.parse(originalDateString)
+        // Define the desired date format
+        val desiredDateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        // Format the date into the desired format
+        return desiredDateFormat.format(date)
+    }
+
+    fun calendarToSimpleDate(calendar: Calendar): String {
+        // Get the Date object from the Calendar
+        val date = calendar.time
+
+        // Define the desired date format
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+
+        // Format the Date object using the SimpleDateFormat
+        return dateFormat.format(date)
+    }
 
     fun convertTextToDate(inputText: String): Date {
         val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-        return dateFormat.parse(inputText) ?: Date()
+        try {
+            return dateFormat.parse(inputText) ?: throw ParseException("Invalid date format", 0)
+        } catch (e: ParseException) {
+            e.printStackTrace()
+            // Handle the parsing error, for example, return a default date
+            return Date() // Return current date as default
+        }
     }
-
     private fun getImageUri(imageView: ImageView): Uri? {
         val drawable = imageView.drawable
         if (drawable is BitmapDrawable) {
@@ -261,7 +290,7 @@ class NewTimesheetEntry : AppCompatActivity() {
 
         categoriesRef.get()
             .addOnSuccessListener { documents ->
-                val categoriesList = mutableListOf<Category>()
+                 categoriesList = mutableListOf<Category>()
                 for (document in documents) {
                     document.toObject<Category>()?.let { category ->
                         categoriesList.add(category)

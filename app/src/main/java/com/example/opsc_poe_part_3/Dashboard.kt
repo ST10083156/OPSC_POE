@@ -17,8 +17,7 @@ class Dashboard : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(binding.root)
 
-        binding.timesheetBtn.setOnClickListener{
-            val intent = Intent(this, TimesheetEntriesDisplay::class.java)
+        binding.timesheetBtn.setOnClickListener{ val intent = Intent(this, TimesheetEntriesDisplay::class.java)
                 startActivity(intent)
                 finish()}
         binding.dailyGoalsBtn.setOnClickListener{
