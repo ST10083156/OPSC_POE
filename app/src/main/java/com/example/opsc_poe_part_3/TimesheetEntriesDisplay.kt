@@ -81,6 +81,11 @@ class TimesheetEntriesDisplay : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+        binding.categoryBtn.setOnClickListener{
+            val intent = Intent(this, CategoriesPage::class.java)
+            startActivity(intent)
+            finish()
+        }
     }
 
 
