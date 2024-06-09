@@ -13,6 +13,15 @@
         android:theme="@style/Base.Theme.OPSC_POE_PART_3"
         tools:targetApi="31">
         <activity
+            android:name=".DialogAddGoal"
+            android:exported="false" />
+        <activity
+            android:name=".GoalListItem"
+            android:exported="false" />
+        <activity
+            android:name=".DailyGoalsTracker"
+            android:exported="false" />
+        <activity
             android:name=".TimesheetDetails"
             android:exported="false" />
         <activity

@@ -86,6 +86,11 @@ class TimesheetEntriesDisplay : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+        binding.GoalsBtn.setOnClickListener{
+            val intent = Intent(this, DailyGoals::class.java)
+            startActivity(intent)
+            finish()
+        }
     }
 
 
