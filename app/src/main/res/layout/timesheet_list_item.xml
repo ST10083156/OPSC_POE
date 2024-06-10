@@ -22,7 +22,6 @@
                 app:layout_constraintTop_toTopOf="parent"
                 android:background="@color/transparent"
                 />
-
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/titleImage"
                 android:layout_width="80dp"
@@ -37,7 +36,6 @@
                 app:shapeAppearanceOverlay="@style/RoundCorner"
                 android:src="@drawable/zoro">
             </com.google.android.material.imageview.ShapeableImageView>
-
             <TextView
                 android:id="@+id/timesheetNameTV"
                 android:layout_width="0dp"
@@ -52,7 +50,6 @@
                 app:layout_constraintStart_toEndOf="@id/titleImage"
                 app:layout_constraintTop_toTopOf="parent"
                 android:textStyle="bold"/>
-
             <TextView
                 android:id="@+id/categoryTV"
                 android:layout_width="0dp"
@@ -92,6 +89,14 @@
                 app:layout_constraintStart_toEndOf="@id/titleImage"
                 app:layout_constraintTop_toBottomOf="@id/dateTV"
                 />
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:progress="0"
+                android:max="100"
+                android:layout_marginTop="8dp"
+                android:visibility="visible"/>
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
@@ -100,9 +105,5 @@
                 app:layout_constraintTop_toBottomOf="@id/titleImage"
                 android:background="@color/lavender"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-
     </androidx.cardview.widget.CardView>
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

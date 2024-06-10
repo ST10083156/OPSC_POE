@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -43,22 +44,22 @@ class TimesheetEntriesDisplay : AppCompatActivity() {
         }
         var emptyTimesheetList = mutableListOf<TimesheetEntry>()
         val layoutManager = LinearLayoutManager(this)
-       /* var adapter = MyAdapter(emptyTimesheetList,this, object:MyAdapter.OnItemClickListener{
-            override fun onItemClick(item: TimesheetEntry) {
-                var intent = Intent(applicationContext,TimesheetDetails::class.java)
-                intent.putExtra("name", item.name)
-                intent.putExtra("category", item.category.name)
-                intent.putExtra("description", item.description)
-                intent.putExtra("date", item.date.time)
-                intent.putExtra("timeSpent", item.timeSpent.inWholeMilliseconds)
-                intent.putExtra("image", item.image.toString())
-                startActivity(intent)
-                finish()
-            }
-        })*/
+        /* var adapter = MyAdapter(emptyTimesheetList,this, object:MyAdapter.OnItemClickListener{
+             override fun onItemClick(item: TimesheetEntry) {
+                 var intent = Intent(applicationContext,TimesheetDetails::class.java)
+                 intent.putExtra("name", item.name)
+                 intent.putExtra("category", item.category.name)
+                 intent.putExtra("description", item.description)
+                 intent.putExtra("date", item.date.time)
+                 intent.putExtra("timeSpent", item.timeSpent.inWholeMilliseconds)
+                 intent.putExtra("image", item.image.toString())
+                 startActivity(intent)
+                 finish()
+             }
+         })*/
         binding.entriesRecyclerView.layoutManager = layoutManager
         getUserEntries(userEmail) { entries ->
-           var adapter = MyAdapter(entries,this, object:MyAdapter.OnItemClickListener{
+            var adapter = MyAdapter(entries,this, object:MyAdapter.OnItemClickListener{
                 override fun onItemClick(item: TimesheetEntry) {
                     var intent = Intent(applicationContext,TimesheetDetails::class.java)
                     intent.putExtra("name", item.name)
@@ -124,7 +125,7 @@ class TimesheetEntriesDisplay : AppCompatActivity() {
         val description: TextView = itemView.findViewById(R.id.timesheetDescTV)
         val date: TextView = itemView.findViewById(R.id.dateTV)
         val button : Button = itemView.findViewById(R.id.itemDisplayBtn)
-
+        val progressBar: ProgressBar = itemView.findViewById(R.id.progressBar) // Add ProgressBar field
 
         fun bind(item: TimesheetEntry) {
             // Bind item data to views here
@@ -154,7 +155,7 @@ class TimesheetEntriesDisplay : AppCompatActivity() {
         }
 
         //used to bind values to the viewholder's properties
-        override fun onBindViewHolder(holder: TimesheetEntriesDisplay.ItemViewHolder, position: Int) {
+        override fun onBindViewHolder(holder: ItemViewHolder, position: Int) { // Updated holder type to ItemViewHolder
             val targetDateFormat = "dd/MM/yyyy"
             val currentItem = data[position]
             Picasso.get().load(currentItem.image).into(holder.image)
@@ -162,10 +163,9 @@ class TimesheetEntriesDisplay : AppCompatActivity() {
             holder.category.text = "Category: ${currentItem.category.name}"
             holder.description.text = "Description: ${currentItem.description}"
             holder.date.text= "Date : ${convertToSimpleDateFormat(currentItem.date.toString(),"EEE MMM dd HH:mm:ss zzz yyyy",targetDateFormat)}"
+            holder.progressBar.progress = 50 // Example progress value
             holder.bind(currentItem)
         }
-
-
         //returns the amount of entries in the data list
         override fun getItemCount(): Int {
             return data.size
@@ -191,9 +191,9 @@ class TimesheetEntriesDisplay : AppCompatActivity() {
                 return originalDateString
             }
         }
-
-
     }
 
 }
+
+
 

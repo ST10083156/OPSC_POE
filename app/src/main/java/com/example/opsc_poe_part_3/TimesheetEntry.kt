@@ -14,7 +14,8 @@ data class TimesheetEntry(
     val category: Category = Category(),
     val description: String = "",
     val timeSpent: Duration = Duration.ZERO,
-    val image: Uri? = null
+    val image: Uri? = null,
+    val estimatedTime: Int = 1 // Defaulting to 1 hour
 ) {
     constructor() : this("", "", Date(), Category(), "", Duration.ZERO, null)
 }
