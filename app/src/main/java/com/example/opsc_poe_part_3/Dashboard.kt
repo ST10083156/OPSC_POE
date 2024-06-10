@@ -25,13 +25,10 @@ class Dashboard : AppCompatActivity() {
             startActivity(intent)
             finish()}
         binding.graphsBtn.setOnClickListener{
-            val intent = Intent(this, DailyHoursGraph::class.java)
+            val intent = Intent(this, CategoriesPage::class.java)
             startActivity(intent)
             finish()}
-        binding.graphsBtn.setOnClickListener{
-            val intent = Intent(this, DailyGoalsTracker::class.java)
-            startActivity(intent)
-            finish()}
+
 
 
 

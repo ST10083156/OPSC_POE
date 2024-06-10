@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:gravity="center"
+    android:background="@drawable/loginbkg">
 
     <EditText
         android:id="@+id/goalEditText"
@@ -11,5 +12,8 @@
         android:layout_height="wrap_content"
         android:hint="Enter your goal"
         android:padding="12dp"
-        android:minHeight="48dp"/>
+        android:minHeight="48dp"
+        android:layout_marginBottom="300dp"
+        android:background="@drawable/custom_edittext"
+        android:textColor="@color/black"/>
 </LinearLayout>

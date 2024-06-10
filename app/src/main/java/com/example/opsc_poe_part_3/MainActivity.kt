@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 else
                 {
-                        val intent = Intent (this, TimesheetEntriesDisplay::class.java)
+                        val intent = Intent (this, Dashboard::class.java)
                         startActivity(intent)
                         finish()
                 }
